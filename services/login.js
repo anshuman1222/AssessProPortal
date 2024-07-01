@@ -4,6 +4,10 @@ var config = require('config');
 
 var passport = require('./passportconf');
 
+var userModel = require('../models/user');
+
+var tool = require('./tool');
+
 var userLogin = (req, res, next) => {
 
     req.check('email', 'Invalid email address').isEmail().notEmpty();
@@ -70,4 +74,49 @@ var userDetails = (req, res, next) => {
     }
 }
 
-module.exports = { userLogin, userDetails };
+var changePassword = (req, res, next) => {
+
+    req.check('userid', 'Empty User Id').notEmpty();
+    req.check('password', 'Invalid password').isLength({ min: 4, max: 20 });
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.status(400).json({
+            success: false,
+            message: 'Invalid inputs',
+            errors: errors
+        })
+    }
+    else {
+        var userid = req.body.userid;
+        var password = req.body.password;
+
+        tool.hashPassword(password)
+            .then((hash) => {
+                userModel.findOneAndUpdate({
+                    _id: userid
+                },
+                    {
+                        password: hash
+                    }).then(() => {
+                        res.json({
+                            success: true,
+                            message: "Password changed successfully."
+                        })
+                    }).catch((err) => {
+                        res.status(500).json({
+                            success: false,
+                            message: "Unable to change Password"
+                        })
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    success: false,
+                    message: "Unable to change Password"
+                })
+            })
+    }  
+}
+
+module.exports = { userLogin, userDetails , changePassword};

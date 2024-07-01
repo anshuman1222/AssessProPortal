@@ -98,7 +98,7 @@ var getAllTest = (req, res, next) => {
     }
 
     try {
-        testModel.find().sort({ createdAt: -1 })
+        testModel.find({ createdBy: creator?._id }).sort({ createdAt: -1 })
             .then((result) => {
                 res.json({
                     success: true,

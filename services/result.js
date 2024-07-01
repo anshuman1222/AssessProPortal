@@ -126,6 +126,7 @@ const getResultByTeacherByTestId = (req, res, next) => {
     }
 
     req.check('testid', 'Test id not found').notEmpty();
+    req.check('userid', 'User id not found').notEmpty();
 
     var errors = req.validationErrors()
     if (errors) {
@@ -216,6 +217,7 @@ const getRankListByTestId = async (req, res, next) => {
     const studentScores = await Promise.all(answerSheets.map(async (answerSheet) => {
         const user = await userModel.findById(answerSheet.student);
         return {
+            userid:user._id,
             username: user.username,
             score: answerSheet.score
         };

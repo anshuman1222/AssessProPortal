@@ -9,6 +9,7 @@ var resultService = require('../services/result');
 
 router.get('/details', loginService.userDetails);
 router.get('/getAllSubjects', subjectService.getAllActiveSubject);
+router.post('/changepassword', loginService.changePassword);
 
 
 //questions

@@ -280,7 +280,7 @@ async function getAllQuestions(req, res, next) {
     }
 
     try {
-        const questions = await questionModel.find({});
+        const questions = await questionModel.find({ createdBy : creator?._id});
 
         const formattedQuestions = questions.map((question) => ({
             id: question._id,
@@ -312,7 +312,7 @@ async function getAllActiveQuestions(req, res, next) {
     }
 
     try {
-        const questions = await questionModel.find({status:true});
+        const questions = await questionModel.find({ createdBy: creator?._id,status:true});
 
 
         res.json({
