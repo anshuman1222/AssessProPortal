@@ -1,9 +1,6 @@
 const answersheetModel = require("../models/answersheet");
 const testModel = require("../models/test");
-const subjectModel = require("../models/subject");
-const testService = require("./test");
 const userModel = require("../models/user")
-
 const getAllCompletedTest = (req, res, next) => {
     var creator = req.user || null;
     if (creator == null || req.user.usertype != 'STUDENT') {

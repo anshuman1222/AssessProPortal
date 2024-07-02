@@ -15,7 +15,7 @@ var testSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['CREATED', 'REGISTRATION_STARTED', 'REGISTRATION_COMPLETE', 'TEST_STARTED', 'TEST_COMPLETE', 'RESULT_DECLARED', 'CANCELLED'],
+        enum: ['CREATED','CANCELLED'],
         default: 'CREATED'
     },
     createdBy: {

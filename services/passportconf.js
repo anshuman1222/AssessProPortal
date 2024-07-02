@@ -17,49 +17,6 @@ var localStrategyOption = {
   passReqToCallback : true
 }
 
-// function localStrategyVerify(req,email, password, done){
-//   userModel.findOne({'email':email}, (err, user)=>{
-//     //  database server error
-//     if(err) {
-//       return done(err, false, {
-//         success : false,
-//         message : 'server error'
-//       });
-//     }
-
-//     // user not found
-//     if(!user) {
-//       return done(null, false, {
-//         success : false,
-//         message : 'email is not registered'
-//       })
-//     } else if (user.status == false) {
-//       return done(null, false, {
-//         success : false,
-//         message : 'your account is blocked'
-//       })
-//     }
-//     else {
-//       //check for password
-//       bcrypt.compare(password, user.password)
-//       .then( (result) => {
-//         if(result) {
-//           return done(null, user, {
-//             success : true,
-//             message : 'logged in successfully'
-//           });
-//         } else {
-//           return done(null, false, {
-//             success : false,
-//             message : 'invalid password'
-//           });
-//         }
-//       })
-//     }
-
-//   })
-// }
-
 async function localStrategyVerify(req, email, password, done) {
   try {
     const user = await userModel.findOne({ email });
@@ -113,30 +70,6 @@ var jwt_options = {
   secretOrKey : config.jwt.secret
 }
 
-// function jwtStrategyVerify(jwt_payload, done) {
-//   userModel.findById(jwt_payload._id, (err, user)=> {
-//     //  database server error
-//     if(err) {
-//       return done(err, false, {
-//         success : false,
-//         message : 'server error'
-//       });
-//     }
-//     if (user) {
-//       return done(null, user,{
-//           success: true,
-//           message: "Successful"
-//       }); 
-//     } 
-//     else {
-//       return done(null, false,{
-//           success: false,
-//           message: "Authorization Failed"
-//       });
-//     }
-//   });
-// }
-
 async function jwtStrategyVerify(jwt_payload, done) {
   try {
     const user = await userModel.findById(jwt_payload._id);
@@ -169,43 +102,6 @@ var localStrategyOptionAdmin = {
   passwordField : 'password',
   passReqToCallback : true
 }
-
-// function localStrategyVerifyAdmin(req, username, password, done) {
-//   adminModel.findOne({'username':username}, (err, admin)=> {
-//     // database server error
-//     if(err) {
-//       return done(err, false, {
-//         success : false,
-//         message : 'server error'
-//       })
-//     }
-
-//     //admin not found
-//     if(!admin) {
-//       return done(null, false, {
-//         success : false,
-//         message : 'user not found'
-//       })
-//     } else {
-//       //check of password 
-//       bcrypt.compare(password, admin.password)
-//       .then((result)=>{
-//         if(result) {
-//           return done(null, admin, {
-//             success : true,
-//             message : 'logged in successfully'
-//           })
-//         }
-//         else {
-//           return done(null, false, {
-//             success : false,
-//             message : 'invalid password'
-//           })
-//         }
-//       })
-//     }
-//   })
-// }
 
 async function authenticateAdmin(req,username, password, done) {
   try {
@@ -247,30 +143,6 @@ var localStrategyAdmin = new LocalStrategy(localStrategyOptionAdmin, authenticat
 
 passport.use('admin-login',localStrategyAdmin);
 
-// function jwtStrategyVeriryAdmin(jwt_payload, done) {
-//   // console.log(jwt_payload);
-//   adminModel.findById(jwt_payload._id, (err, admin)=>{
-//     //database server error
-//     if(err) {
-//       return done(err, false, {
-//         success : false,
-//         message : 'server error'
-//       })
-//     }
-
-//     if (admin) {
-//       return done(null, admin, {
-//         success : true,
-//         message : 'successful'
-//       })
-//     } else {
-//       return done(null, false, {
-//         success : false,
-//         message : 'Authorization failed'
-//       })
-//     }
-//   })
-// }
 async function jwtStrategyVerifyAdmin(jwt_payload, done) {
   try {
     const admin = await adminModel.findById(jwt_payload._id);

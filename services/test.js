@@ -1,28 +1,6 @@
 var testModel = require('../models/test');
-var questionModel = require('../models/question');
 var answersheetModel = require('../models/answersheet');
 const testRegistrationModel = require('../models/testRegistration');
-var getTestStatus = (test) => {
-    if (test.status === 'CANCELLED')
-        return test.status;
-    var status = 'CREATED'
-    var now = new Date();
-    if (Date.parse(test.resultTime) < now) {
-        status = 'RESULT_DECLARED';
-    } else if (Date.parse(test.endTime) < now) {
-        status = 'TEST_COMPLETE';
-    } else if (Date.parse(test.startTime) < now) {
-        status = 'TEST_STARTED';
-    } else if (Date.parse(test.regEndTime) < now) {
-        status = 'REGISTRATION_COMPLETE'
-    } else if (Date.parse(test.regStartTime) < now) {
-        status = 'REGISTRATION_STARTED';
-    }
-
-
-    return status;
-}
-
 
 var createTest = async (req, res, next) => {
     var creator = req.user || null;
@@ -72,20 +50,6 @@ var createTest = async (req, res, next) => {
     }
 }
 
-var updateStatus = (test, correctStatus) => {
-
-    if (correctStatus !== test.status) {
-        console.log(correctStatus + " " + test.status)
-
-        testModel.findByIdAndUpdate({ _id: test._id }, { status: correctStatus })
-            .then((updated) => {
-                console.log("updated status of test " + updated._id + " to " + correctStatus);
-            }).catch((err) => {
-                console.log('Error in status update');
-                console.log(err);
-            })
-    }
-}
 
 var getAllTest = (req, res, next) => {
     var creator = req.user || null;
@@ -295,7 +259,6 @@ var getUpcomingTestforStudent = async (req, res, next) => {
         });
         return;
     });
-    // console.log(tests);
 
     var testlist = [];
     var registeredList = await testRegistrationModel.find({ user: creator._id }, { test: 1 }).catch(err => {
@@ -339,6 +302,4 @@ module.exports = {
     testRegistration,
     getAllTestWithStudentRegisterCheck,
     getUpcomingTestforStudent,
-    getTestStatus,
-    updateStatus
 }

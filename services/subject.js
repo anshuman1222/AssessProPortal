@@ -1,29 +1,4 @@
 const subjectModel = require("../models/subject")
-
-
-// var getAllSubject = (req, res, next) => {
-//     subjectModel.find({}, (err, sub) => {
-//         if (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 message: 'Internal server error'
-//             })
-//         } else {
-//             var subjects = []
-//             sub.forEach((subject) => {
-//                 subjects.push({
-//                     "id": subject._id,
-//                     "subject": subject.name,
-//                     "status": subject.status
-//                 })
-//             })
-//             res.json({
-//                 success: true,
-//                 subjects: subjects
-//             })
-//         }
-//     })
-// }
 async function getAllSubject(req, res, next) {
     try {
         const subjects = await subjectModel.find({});
@@ -45,31 +20,6 @@ async function getAllSubject(req, res, next) {
         });
     }
 }
-
-// var getAllActiveSubject = (req, res, next) => {
-//     subjectModel.find({ status: true }, (err, sub) => {
-//         if (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 message: 'Internal server error'
-//             })
-//         } else {
-//             var subjects = []
-//             sub.forEach((subject) => {
-//                 subjects.push({
-//                     "id": subject._id,
-//                     "subject": subject.name,
-//                     "status": subject.status
-//                 })
-//             })
-//             res.json({
-//                 success: true,
-//                 subjects: subjects
-//             })
-//         }
-//     })
-// }
-
 async function getAllActiveSubject(req, res, next) {
     try {
         const subjects = await subjectModel.find({ status: true });

@@ -1,30 +1,6 @@
 const userModel = require("../models/user")
-
-
-
-// var getAllTeacher = (req, res, next) => {
-//     userModel.find({ usertype: "TEACHER" }, (err, users) => {
-//         if (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 message: 'Internal server error'
-//             })
-//         } else {
-//             var teachers = []
-//             users.forEach((teacher) => {
-//                 teachers.push({
-//                     "id": teacher._id,
-//                     "name": teacher.username,
-//                     "status": teacher.status
-//                 })
-//             })
-//             res.json({
-//                 success: true,
-//                 teachers
-//             })
-//         }
-//     })
-// }
+var questionModel = require('../models/question');
+var testModel = require('../models/test');
 
 async function getAllTeacher(req, res, next) {
     try {
@@ -81,7 +57,84 @@ var getTeacherStatusCount = (req, res, next) => {
         })
 }
 
+var getDashboardCount = (req, res, next) => {
+    errors = 0
+
+    let activeStudents = 0
+    let activeTests = 0
+    let activeQuestions = 0
+    let blockedQuestions = 0
+    questionModel.aggregate(
+        [
+            { $match: { createdBy: req?.user?._id } },
+            { $group: { _id: "$status", count: { $sum: 1 } } }
+        ]
+    )
+        .then((result) => {
+            result.forEach((x) => {
+                if (x._id == true) {
+                    activeQuestions = x.count
+                }
+                if (x._id == false) {
+                    blockedQuestions = x.count
+                }
+
+            })
+            userModel.aggregate(
+                [
+                    { $match: { usertype: "STUDENT" } },
+                    { $group: { _id: "$status", count: { $sum: 1 } } }
+                ]
+            )
+                .then((result) => {
+                    result.forEach((x) => {
+                        if (x._id == true) {
+                            activeStudents = x.count
+                        }
+                    })
+                    testModel.aggregate(
+                        [
+                            { $match: { createdBy: req?.user?._id } },
+                            { $group: { _id: "$status", count: { $sum: 1 } } }
+                        ]
+                    )
+                        .then((result) => {
+                            result.forEach((x) => {
+                                    activeTests = x.count
+                            })
+                            res.json({
+                                success: true,
+                                activeStudents,
+                                activeTests,
+                                activeQuestions,
+                                blockedQuestions
+                            })
+                        })
+                        .catch((err) => {
+                            res.status(500).json({
+                                success: false,
+                                message: 'Internal Server Error'
+                            })
+                        })
+                })
+                .catch((err) => {
+                    res.status(500).json({
+                        success: false,
+                        message: 'Internal Server Error'
+                    })
+                })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            })
+        })
+
+}
+
 module.exports = {
     getTeacherStatusCount,
-    getAllTeacher
+    getAllTeacher,
+    getDashboardCount
 }

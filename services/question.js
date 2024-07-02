@@ -34,43 +34,6 @@ var addQuestion = (req, res, next) => {
             })
         }
         else {
-            // check for valid subject
-            // subjectModel.findOne({ _id: req.body.subject, status: true }).then((subject) => {
-            //     //subject found
-            //     if (subject) {
-            //         var explanation = req.body.explanation || null;
-            //         var tempdata = new questionModel({
-            //             body: req.body.body,
-            //             explanation: explanation,
-            //             options: req.body.options,
-            //             subject: subject._id,
-            //             marks: req.body.marks,
-            //             answer: req.body.answer,
-            //             status: true,
-            //             createdBy: creator._id
-            //         })
-            //         tempdata.save((err, que) => {
-            //             if (err) {
-            //                 console.log(err);
-            //                 res.status(500).json({
-            //                     success: false,
-            //                     message: "Unable to add question"
-            //                 })
-            //             } else {
-            //                 res.json({
-            //                     success: true,
-            //                     message: 'Question created successfully!'
-            //                 })
-            //             }
-            //         })
-            //     }
-            //     else {
-            //         res.json({
-            //             success: false,
-            //             message: 'Subject not found'
-            //         })
-            //     }
-            // })
             subjectModel.findOne({ _id: req.body.subject, status: true }).then((subject) => {
                 if (subject) {
                     const explanation = req.body.explanation || null;
@@ -117,45 +80,7 @@ var addQuestion = (req, res, next) => {
 }
 
 
-// search questions from body
-var searchQuestion = (req, res, next) => {
-    var creator = req.user || null
-    if (creator == null || req.user.usertype != 'TEACHER') {
-        res.status(401).json({
-            success: false,
-            message: "Permissions not granted!"
-        })
-        return
-    }
 
-    req.check('query', 'Empty Query').notEmpty();
-    var errors = req.validationErrors()
-
-    if (errors) {
-        console.log(errors);
-        res.json({
-            success: false,
-            message: 'Invalid Inputs',
-            errors: errors
-        })
-    }
-    else {
-        questionModel.find({ body: new RegExp(req.body.query) }).limit(20).then((questions) => {
-            result = questions.map((que) => ({ _id: que._id, body: que.body, status: que.status }));
-            res.json({
-                success: true,
-                list: result
-            })
-        })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).json({
-                    success: false,
-                    message: "error"
-                })
-            })
-    }
-}
 
 //update question and ans
 var updateQuestion = (req, res, next) => {
@@ -281,14 +206,6 @@ async function getAllQuestions(req, res, next) {
 
     try {
         const questions = await questionModel.find({ createdBy : creator?._id});
-
-        const formattedQuestions = questions.map((question) => ({
-            id: question._id,
-            body: question.body,
-            mark:question.marks,
-            status: question.status,
-        }));
-
         res.json({
             success: true,
             questions: questions,
@@ -522,7 +439,6 @@ var getQuestionAnswerByIds = (req, res, next) => {
 
 module.exports = {
     addQuestion,
-    searchQuestion,
     updateQuestion,
     getQuestionById,
     changeQuestionStatus,

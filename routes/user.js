@@ -6,15 +6,16 @@ var questionService = require('../services/question');
 var testService = require('../services/test');
 var taketestService = require('../services/taketest');
 var resultService = require('../services/result');
+var teacherService = require('../services/teacher');
 
 router.get('/details', loginService.userDetails);
 router.get('/getAllSubjects', subjectService.getAllActiveSubject);
 router.post('/changepassword', loginService.changePassword);
+router.get('/getDashboardCount', teacherService.getDashboardCount);
 
 
 //questions
 router.post('/addQuestion', questionService.addQuestion);
-router.post('/searchQuestion', questionService.searchQuestion);
 router.post('/updateQuestion', questionService.updateQuestion);
 router.post('/getQuestion', questionService.getQuestionById);
 router.get('/getAllQuestion', questionService.getAllQuestions);

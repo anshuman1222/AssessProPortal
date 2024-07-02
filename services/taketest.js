@@ -2,7 +2,7 @@ var answersheetModel = require('../models/answersheet');
 const questionModel = require('../models/question');
 var testModel = require('../models/test');
 const testRegistrationModel = require('../models/testRegistration');
-var testService = require('./test');
+
 
 var getAttemptEndTime = (test, startAttemptTime) => {
     var regularEndTime = new Date(Date.parse(startAttemptTime) + (test.duration * 1000));
