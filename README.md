@@ -35,11 +35,13 @@ The Online Exam Portal addresses the need by harnessing the power of MERN stack 
     - View detailed test information such as rank-list and score of students in particular test.
     - Add Questions to database, update questions and status.
     - Platform enables use of AI to create high-quality, diverse, and relevant questions
+    - `email - demoteacher@mail.com and password - 123456`
 
 2. **Student:**
     - Register for tests and get upcoming exams list in tabular form.
     - Allows students to navigate through exams with ease, with clear instructions, timers, and instant feedback on their performance. 
    - Get detailed report of completed test along with explanation and correct and marked answers.
+   -  `email - demostudent@mail.com and password - 123456`
 
 
 ## **General Features:**
