@@ -39,6 +39,7 @@ The Online Exam Portal addresses the need by harnessing the power of MERN stack 
 
 2. **Student:**
     - Register for tests and get upcoming exams list in tabular form.
+    - Register Feature
     - Allows students to navigate through exams with ease, with clear instructions, timers, and instant feedback on their performance. 
    - Get detailed report of completed test along with explanation and correct and marked answers.
    -  `email - demostudent@mail.com and password - 123456`
