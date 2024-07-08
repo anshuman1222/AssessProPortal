@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../redux/actions/user";
+import { registerStudent } from '../redux/actions/user';
 import { GrUserAdmin } from "react-icons/gr";
 const Login = () => {
+    const [values, setValues] = useState({state:true});
+    const toggleMember = () => {
+        setValues({ ...values, state: !values.state });
+    };
     const { user, loading } = useSelector((state) => state.user);
     const {
         register,
@@ -21,7 +26,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const submitHandler = async (data, e) => {
         e.preventDefault();
-        dispatch(login(data?.email, data?.password));
+        values?.state ? dispatch(login(data?.email, data?.password)) : dispatch(registerStudent(data?.username, data?.email, data?.password)) ;
     };
     return (
         <div className='w-full min-h-screen flex items-center justify-center flex-col lg:flex-row bg-[#f3f4f6]'>
@@ -33,13 +38,27 @@ const Login = () => {
                     >
                         <div className=''>
                             <p className='text-blue-600 text-3xl font-bold text-center'>
-                                Welcome back!
+                                {values.state ? 'Welcome back!' : 'Get started with!'}
                             </p>
-                            <p className='text-center text-base text-gray-700 '>
-                                Keep all your credential safe.
+                            <p className='text-center text-base text-gray-700'>
+                                {values.state ? 'Not a registered student yet?' : 'Already a registered student?'}
+                                <button type='button' className='bg-white font-semibold text-gray-900  px-1 py-2 outline-none' onClick={toggleMember}>
+                                    {values.state ? 'Register' : 'Login'}
+                                </button>
                             </p>
                         </div>
                         <div className='flex flex-col gap-y-5'>
+                            {!values.state && (
+                                <Textbox
+                                    placeholder='Student UserName'
+                                    type='text'
+                                    name='username'
+                                    label='Student UserName'
+                                    className='w-full rounded-full'
+                                    register={register("username", { required: "UserName is required" })}
+                                    error={errors.username ? errors.username.message : ""}
+                                />
+                            )}
                             <Textbox
                                 placeholder='email@example.com'
                                 type='email'
@@ -68,7 +87,7 @@ const Login = () => {
                                 className='w-full h-10 bg-blue-700 text-white rounded-full'
                             />
                             <Button
-                                type='submit'
+                                type='button'
                                 label="Admin Login"
                                 className='flex flex-row-reverse items-center bg-white font-semibold text-gray-900 '
                                 onClick={() => navigate('/admin-log-in')}

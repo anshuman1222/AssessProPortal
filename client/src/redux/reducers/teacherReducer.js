@@ -28,7 +28,7 @@ const TeacherSlice = createSlice({
         TeacherSuccess: (state, action) => {
             state.loading = false;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         TeacherFail: (state, action) => {
             state.loading = false;

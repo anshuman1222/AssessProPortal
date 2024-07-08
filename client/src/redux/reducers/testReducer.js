@@ -29,7 +29,7 @@ const TestSlice = createSlice({
         RegisterTestSuccess: (state, action) => {
             state.loading = false;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         RegisterTestFail: (state, action) => {
             state.loading = false;

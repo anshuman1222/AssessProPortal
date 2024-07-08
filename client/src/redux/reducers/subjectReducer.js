@@ -28,7 +28,7 @@ const SubjectSlice = createSlice({
         SubjectSuccess: (state, action) => {
             state.loading = false;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         SubjectFail: (state, action) => {
             state.loading = false;

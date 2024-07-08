@@ -23,7 +23,7 @@ const AnswerSheetSlice = createSlice({
             state.answersheet = action.payload.answersheet;
             state.questionids = action.payload.questions;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         loadAnswerSheetFail: (state, action) => {
             state.loading = false;
@@ -38,7 +38,7 @@ const AnswerSheetSlice = createSlice({
             state.testquestions = action.payload.questions;
             state.startTime = action.payload.startTime;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         loadTestQuestionsFail: (state, action) => {
             state.loading = false;
@@ -51,7 +51,7 @@ const AnswerSheetSlice = createSlice({
         saveAnswerSuccess: (state, action) => {
             state.saveloading=false;
             state.message = action.payload.message
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         saveAnswerFail: (state, action) => {
             state.saveloading=false;

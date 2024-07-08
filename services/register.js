@@ -23,7 +23,7 @@ var studentRegister = (req, res, next) => {
         userModel.findOne({ 'email': email }).then((user) => {
             //user already exists
             if (user) {
-                res.status(400).json({
+                res.json({
                     success: false,
                     message: 'This email is already exists!'
                 })

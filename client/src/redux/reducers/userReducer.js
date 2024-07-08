@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUserFromLocalStorage, addUserToLocalStorage, removeUserFromLocalStorage } from "../../utils";
 const { loading, isAuthenticated, user, message, error , token } = getUserFromLocalStorage();
 import { toast } from 'react-toastify';
+import { act } from "react";
 const initialState = {
     loading: loading,
     isAuthenticated: isAuthenticated,
@@ -42,6 +43,19 @@ const userSlice = createSlice({
             addUserToLocalStorage(state);
             toast.error(state.message);
         },
+        registerRequest: (state) => {
+            state.loading = true;
+        },
+        registerSuccess: (state, action) => {
+            state.loading = false;
+            state.message = action.payload.message;
+            action.payload.success ? toast.success(state.message) : toast.error(state.message) ;
+        },
+        registerFail: (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            toast.error(state.message);
+        },
         setOpenSidebar: (state, action) => {
             state.isSidebarOpen = action.payload;
         },
@@ -68,10 +82,10 @@ const userSlice = createSlice({
         changePasswordSuccess: (state, action) => {
             state.passwordloading = false;
             state.message = action.payload.message;
-            toast.success(state.message);
+            action.payload.success ? toast.success(state.message) : toast.error(state.message);
         },
         changePasswordFail: (state, action) => {
-            state.loading = false;
+            state.passwordloading = false;
             state.message = action.payload;
             toast.error(state.message);
         },
@@ -102,6 +116,9 @@ export const {
     changePasswordFail,
     loadDashBoardRequest,
     loadDashboardSuccess,
-    loadDashboardFail
+    loadDashboardFail,
+    registerRequest,
+    registerSuccess,
+    registerFail
 } = userSlice.actions;
 export default userSlice.reducer;    

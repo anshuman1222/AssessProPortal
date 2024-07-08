@@ -11,7 +11,10 @@ import {
     changePasswordSuccess,
     loadDashBoardRequest,
     loadDashboardSuccess,
-    loadDashboardFail
+    loadDashboardFail,
+    registerRequest,
+    registerFail,
+    registerSuccess
 } from "../reducers/userReducer";
 export const login = (email, password) => {
     return async (dispatch) => {
@@ -35,6 +38,23 @@ export const login = (email, password) => {
         }
     };
 };
+
+export const registerStudent = (username, email, password) => {
+    const bodyParameters = {
+        username: username,
+        email: email,
+        password: password
+    };
+    return async (dispatch) => {
+        try {
+            dispatch(registerRequest());
+            const { data } = await axios.post('https://exam-portal-backend-version-1.onrender.com/api/public/register', bodyParameters);
+            dispatch(registerSuccess(data));
+        } catch (error) {
+            dispatch(registerFail(error.message));
+        }
+    };
+}
 export const logout = () => async (dispatch) => {
     try {
         dispatch(logoutRequest());
